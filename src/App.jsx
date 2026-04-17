@@ -30,21 +30,25 @@ export default function App() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-dark-900 text-white overflow-hidden">
+    <div className="h-screen flex flex-col overflow-hidden" style={{ background: 'linear-gradient(135deg, #fdf6f9 0%, #f5eeff 50%, #fdf0f8 100%)' }}>
+
       {/* Header */}
-      <header className="flex-shrink-0 flex items-center justify-between px-5 py-3 border-b border-white/5 bg-dark-800/80 backdrop-blur-sm">
+      <header className="flex-shrink-0 flex items-center justify-between px-5 py-3 bg-white/70 backdrop-blur-sm border-b border-pastel-pink/40 soft-shadow">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm font-bold">
-            AI
+          <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-pink-300 to-rose-300 flex items-center justify-center text-lg soft-shadow">
+            🌸
           </div>
-          <span className="font-semibold text-white tracking-tight">AI Platform</span>
+          <div>
+            <span className="font-bold text-soft-text tracking-tight">AI Platform</span>
+            <span className="text-xs text-soft-muted ml-2">Proxy Pattern Demo</span>
+          </div>
         </div>
         <div className="flex items-center gap-3">
           <PlanBadge />
           <select
             value={activeUser.id}
             onChange={handleUserChange}
-            className="text-xs bg-dark-700 border border-white/10 text-gray-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+            className="text-xs bg-white border border-pastel-rose/50 text-soft-text rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-pink-200 cursor-pointer soft-shadow"
           >
             {TEST_USERS.map(u => (
               <option key={u.id} value={u.id}>{u.name}</option>
@@ -57,12 +61,13 @@ export default function App() {
       <div className="flex flex-1 overflow-hidden">
 
         {/* Sidebar */}
-        <aside className="hidden md:flex w-60 flex-col gap-4 p-4 border-r border-white/5 bg-dark-800/50 overflow-y-auto flex-shrink-0">
+        <aside className="hidden md:flex w-64 flex-col gap-4 p-4 border-r border-pastel-pink/30 bg-white/40 backdrop-blur-sm overflow-y-auto flex-shrink-0">
 
-          {/* Quota section */}
-          <div className="glass rounded-xl p-4">
+          {/* Quota */}
+          <div className="soft-card rounded-2xl p-4">
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Quota</span>
+              <span className="text-base">🍬</span>
+              <span className="text-xs font-semibold text-soft-text uppercase tracking-wider">Quota</span>
             </div>
             <QuotaBar />
           </div>
@@ -70,31 +75,29 @@ export default function App() {
           {/* Rate limit */}
           <RateLimitCounter plan={activeUser.plan} isBlocked={isBlocked} retryAfter={retryAfter} />
 
-          {/* Usage chart */}
-          <div className="glass rounded-xl p-4">
-            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
-              7-day usage
+          {/* Chart */}
+          <div className="soft-card rounded-2xl p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-base">📊</span>
+              <span className="text-xs font-semibold text-soft-text uppercase tracking-wider">7-day usage</span>
             </div>
             <UsageChart />
           </div>
 
-          {/* User info */}
-          <div className="mt-auto glass rounded-xl p-3 flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center text-xs font-semibold flex-shrink-0">
+          {/* User card */}
+          <div className="mt-auto soft-card rounded-2xl p-3 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-pastel-pink to-pastel-lavender flex items-center justify-center text-sm font-bold text-pink-600 flex-shrink-0 soft-shadow">
               {activeUser.name[0]}
             </div>
             <div className="min-w-0">
-              <div className="text-xs font-medium text-gray-300 truncate">{activeUser.name}</div>
-              <div className="text-xs text-gray-500">ID: {activeUser.id}</div>
+              <div className="text-xs font-semibold text-soft-text truncate">{activeUser.name}</div>
+              <div className="text-xs text-soft-muted">User ID: {activeUser.id}</div>
             </div>
           </div>
         </aside>
 
-        {/* Main chat */}
-        <main className="flex-1 flex flex-col overflow-hidden bg-dark-900">
-          {/* Subtle gradient top */}
-          <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-indigo-950/20 to-transparent pointer-events-none" />
-
+        {/* Chat */}
+        <main className="flex-1 flex flex-col overflow-hidden">
           <ChatWindow messages={messages} isLoading={isLoading} />
           <ChatInput
             onNewMessage={addMessage}

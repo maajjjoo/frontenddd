@@ -9,7 +9,7 @@
 }
 
 body {
-  background: #0f0f13;
+  background: #fdf6f9;
 }
 
 ::-webkit-scrollbar {
@@ -19,25 +19,26 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: #f0c4d4;
   border-radius: 4px;
 }
 
-.glass {
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.glow-blue {
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
-}
-
 @keyframes pulse-dot {
-  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  0%, 100% { opacity: 0.4; transform: scale(0.8); }
   50% { opacity: 1; transform: scale(1.2); }
 }
 
 .dot-1 { animation: pulse-dot 1.2s ease-in-out infinite; animation-delay: 0ms; }
 .dot-2 { animation: pulse-dot 1.2s ease-in-out infinite; animation-delay: 200ms; }
 .dot-3 { animation: pulse-dot 1.2s ease-in-out infinite; animation-delay: 400ms; }
+
+.soft-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 182, 210, 0.3);
+  box-shadow: 0 4px 24px rgba(255, 150, 190, 0.08);
+}
+
+.soft-shadow {
+  box-shadow: 0 4px 20px rgba(255, 150, 190, 0.15);
+}

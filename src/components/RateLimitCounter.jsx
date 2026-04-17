@@ -4,16 +4,14 @@ export default function RateLimitCounter({ plan, isBlocked, retryAfter }) {
   const max = PLAN_MAX[plan] ?? 10;
 
   return (
-    <div className={`rounded-xl p-3 text-xs transition-all ${
+    <div className={`rounded-2xl p-3 text-xs transition-all ${
       isBlocked
-        ? 'bg-red-500/10 border border-red-500/30'
-        : 'bg-dark-600 border border-white/5'
+        ? 'bg-red-50 border border-red-200'
+        : 'bg-pastel-lavender/40 border border-pastel-purple/40'
     }`}>
       <div className="flex items-center justify-between mb-1">
-        <span className="text-gray-400 font-medium">Rate Limit</span>
-        <span className={`font-semibold ${isBlocked ? 'text-red-400' : 'text-indigo-400'}`}>
-          {max} req/min
-        </span>
+        <span className="text-soft-text font-medium">Rate Limit</span>
+        <span className="font-semibold text-purple-500">{max} req/min</span>
       </div>
       {isBlocked ? (
         <div className="flex items-center gap-1.5 text-red-400 font-medium">
@@ -21,7 +19,7 @@ export default function RateLimitCounter({ plan, isBlocked, retryAfter }) {
           Blocked — retry in {retryAfter}s
         </div>
       ) : (
-        <div className="text-gray-500">No active block</div>
+        <div className="text-soft-muted">No active block ✓</div>
       )}
     </div>
   );

@@ -20,26 +20,26 @@ export default function UpgradeModal({ onClose, onUpgraded }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="glass rounded-2xl p-6 w-full max-w-md border border-white/10">
+    <div className="fixed inset-0 bg-pink-100/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-3xl p-6 w-full max-w-md border border-pastel-rose/40 soft-shadow">
         <div className="text-center mb-5">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-2xl mx-auto mb-3">
-            🔒
+          <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-pastel-pink to-pastel-lavender flex items-center justify-center text-3xl mx-auto mb-3 soft-shadow">
+            🌸
           </div>
-          <h2 className="text-lg font-bold text-white">Monthly quota exhausted</h2>
-          <p className="text-sm text-gray-400 mt-1">Upgrade your plan to keep generating</p>
+          <h2 className="text-lg font-bold text-soft-text">Monthly quota exhausted</h2>
+          <p className="text-sm text-soft-muted mt-1">Upgrade your plan to keep generating</p>
         </div>
 
         <div className="grid grid-cols-2 gap-3 mb-5">
-          <div className="rounded-xl p-4 bg-indigo-500/10 border border-indigo-500/30">
-            <div className="text-xs font-semibold text-indigo-300 mb-1">🚀 PRO</div>
-            <div className="text-xs text-gray-400">500,000 tokens/mo</div>
-            <div className="text-lg font-bold text-white mt-2">$9.99<span className="text-xs text-gray-400">/mo</span></div>
+          <div className="rounded-2xl p-4 bg-pastel-sky/40 border border-blue-200/60">
+            <div className="text-xs font-semibold text-blue-500 mb-1">🚀 PRO</div>
+            <div className="text-xs text-soft-muted">500,000 tokens/mo</div>
+            <div className="text-xl font-bold text-soft-text mt-2">$9.99<span className="text-xs text-soft-muted font-normal">/mo</span></div>
           </div>
-          <div className="rounded-xl p-4 bg-purple-500/10 border border-purple-500/30">
-            <div className="text-xs font-semibold text-purple-300 mb-1">👑 ENTERPRISE</div>
-            <div className="text-xs text-gray-400">Unlimited tokens</div>
-            <div className="text-lg font-bold text-white mt-2">Custom</div>
+          <div className="rounded-2xl p-4 bg-pastel-lavender/40 border border-purple-200/60">
+            <div className="text-xs font-semibold text-purple-500 mb-1">👑 ENTERPRISE</div>
+            <div className="text-xs text-soft-muted">Unlimited tokens</div>
+            <div className="text-xl font-bold text-soft-text mt-2">Custom</div>
           </div>
         </div>
 
@@ -47,13 +47,13 @@ export default function UpgradeModal({ onClose, onUpgraded }) {
           <button
             onClick={handleUpgrade}
             disabled={loading}
-            className="flex-1 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white rounded-xl py-2.5 text-sm font-semibold hover:from-indigo-500 hover:to-indigo-400 transition-all disabled:opacity-50 glow-blue"
+            className="flex-1 bg-gradient-to-r from-pink-400 to-rose-400 text-white rounded-2xl py-2.5 text-sm font-semibold hover:from-pink-300 hover:to-rose-300 transition-all disabled:opacity-50 soft-shadow"
           >
-            {loading ? 'Upgrading...' : 'Upgrade to Pro'}
+            {loading ? 'Upgrading...' : '✦ Upgrade to Pro'}
           </button>
           <button
             onClick={onClose}
-            className="flex-1 bg-white/5 text-gray-400 rounded-xl py-2.5 text-sm font-medium hover:bg-white/10 transition-all border border-white/5"
+            className="flex-1 bg-pastel-pink/30 text-soft-muted rounded-2xl py-2.5 text-sm font-medium hover:bg-pastel-pink/50 transition-all border border-pastel-rose/30"
           >
             Maybe later
           </button>

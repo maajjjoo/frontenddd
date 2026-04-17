@@ -1,9 +1,9 @@
 import { useUser } from '../context/UserContext';
 
 const STYLES = {
-  FREE:       'bg-gray-500/20 text-gray-300 border border-gray-500/30',
-  PRO:        'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30',
-  ENTERPRISE: 'bg-purple-500/20 text-purple-300 border border-purple-500/30',
+  FREE:       'bg-pastel-lavender text-purple-600 border border-pastel-purple',
+  PRO:        'bg-pastel-sky text-blue-600 border border-blue-200',
+  ENTERPRISE: 'bg-pastel-peach text-orange-600 border border-orange-200',
 };
 
 const ICONS = { FREE: '⚡', PRO: '🚀', ENTERPRISE: '👑' };
@@ -12,7 +12,7 @@ export default function PlanBadge() {
   const { activeUser } = useUser();
   const plan = activeUser.plan;
   return (
-    <span className={`rounded-full px-3 py-1 text-xs font-semibold flex items-center gap-1 ${STYLES[plan] ?? STYLES.FREE}`}>
+    <span className={`rounded-full px-3 py-1 text-xs font-semibold flex items-center gap-1.5 ${STYLES[plan] ?? STYLES.FREE}`}>
       <span>{ICONS[plan]}</span>
       {plan}
     </span>
