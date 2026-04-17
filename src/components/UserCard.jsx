@@ -22,8 +22,8 @@ export default function UserCard() {
 
   const plan = quota?.plan ?? activeUser.plan;
   const used = quota?.tokensUsed ?? 0;
-  const remaining = quota?.tokensRemaining ?? '—';
-  const total = typeof remaining === 'number' ? used + remaining : null;
+  const remaining = quota?.tokensRemaining ?? null;
+  const total = (remaining !== null && remaining !== undefined) ? used + remaining : null;
   const pct = total ? Math.min(100, (used / total) * 100) : 0;
   const barColor = pct < 70 ? 'bg-emerald-400' : pct < 90 ? 'bg-amber-400' : 'bg-red-400';
 
@@ -68,7 +68,7 @@ export default function UserCard() {
             <div className="flex justify-between text-xs text-gray-500">
               <span>Remaining</span>
               <span className="font-medium text-gray-700">
-                {typeof remaining === 'number' ? remaining.toLocaleString() : '∞'}
+                {remaining !== null ? remaining.toLocaleString() : '∞'}
               </span>
             </div>
 
