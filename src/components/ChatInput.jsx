@@ -31,8 +31,8 @@ export default function ChatInput({ onNewMessage, onQuotaExceeded, isBlocked, re
   };
 
   return (
-    <div className="p-4 bg-white border-t border-gray-100">
-      <div className="border border-gray-200 rounded-2xl p-3 flex flex-col gap-2 bg-white focus-within:border-indigo-300 focus-within:ring-2 focus-within:ring-indigo-50 transition-all">
+    <div className="px-4 pb-4 pt-3 bg-[#f4f6fb]">
+      <div className="bg-white border border-[#e0e4ee] rounded-2xl p-3 flex flex-col gap-2 focus-within:border-indigo-300 focus-within:ring-3 focus-within:ring-indigo-50 transition-all shadow-sm">
         <textarea
           className="w-full bg-transparent text-gray-800 text-sm resize-none focus:outline-none placeholder-gray-400 leading-relaxed"
           rows={2}
@@ -42,18 +42,31 @@ export default function ChatInput({ onNewMessage, onQuotaExceeded, isBlocked, re
           onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
           disabled={isBlocked || isLoading}
         />
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between pt-1 border-t border-[#f0f2f8]">
           <TokenEstimator prompt={prompt} />
           <button
             onClick={handleSend}
             disabled={!canSend}
-            className={`px-4 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-semibold transition-all ${
               canSend
-                ? 'bg-indigo-600 text-white hover:bg-indigo-700'
+                ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm'
                 : 'bg-gray-100 text-gray-400 cursor-not-allowed'
             }`}
           >
-            {isBlocked ? `Wait ${retryAfter}s` : isLoading ? '...' : 'Send'}
+            {isBlocked ? `Wait ${retryAfter}s` : isLoading ? (
+              <span className="flex gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-white/60 dot-1" />
+                <span className="w-1.5 h-1.5 rounded-full bg-white/60 dot-2" />
+                <span className="w-1.5 h-1.5 rounded-full bg-white/60 dot-3" />
+              </span>
+            ) : (
+              <>
+                Send
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+              </>
+            )}
           </button>
         </div>
       </div>
