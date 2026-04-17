@@ -3,7 +3,7 @@ import { generateText } from '../api/api';
 import { useUser } from '../context/UserContext';
 import TokenEstimator from './TokenEstimator';
 
-export default function ChatInput({ onNewMessage, onQuotaExceeded, isBlocked, retryAfter, block, refreshQuota }) {
+export default function ChatInput({ onNewMessage, onQuotaExceeded, isBlocked, retryAfter, block, refreshQuota, onLoadingChange }) {
   const { activeUser } = useUser();
   const [prompt, setPrompt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -16,6 +16,7 @@ export default function ChatInput({ onNewMessage, onQuotaExceeded, isBlocked, re
     setPrompt('');
     onNewMessage({ id: Date.now(), role: 'user', text, timestamp: new Date() });
     setIsLoading(true);
+    onLoadingChange?.(true);
     try {
       const response = await generateText(activeUser.id, text);
       onNewMessage({ id: Date.now() + 1, role: 'ai', text: response.text, timestamp: new Date() });
@@ -27,10 +28,11 @@ export default function ChatInput({ onNewMessage, onQuotaExceeded, isBlocked, re
       } else if (status === 402) {
         onQuotaExceeded();
       } else {
-        onNewMessage({ id: Date.now() + 1, role: 'ai', text: 'Error: ' + (err.message ?? 'Unknown error'), timestamp: new Date() });
+        onNewMessage({ id: Date.now() + 1, role: 'ai', text: '⚠️ ' + (err.message ?? 'Unknown error'), timestamp: new Date() });
       }
     } finally {
       setIsLoading(false);
+      onLoadingChange?.(false);
     }
   };
 
@@ -42,33 +44,39 @@ export default function ChatInput({ onNewMessage, onQuotaExceeded, isBlocked, re
   };
 
   return (
-    <div className="border-t border-gray-200 p-4 bg-white">
-      <div className="flex gap-2 items-end">
-        <div className="flex-1">
-          <textarea
-            className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-            rows={2}
-            placeholder="Type a prompt... (Enter to send)"
-            value={prompt}
-            onChange={e => setPrompt(e.target.value)}
-            onKeyDown={handleKeyDown}
-            disabled={isBlocked || isLoading}
-          />
-          <div className="mt-1 ml-1">
-            <TokenEstimator prompt={prompt} />
-          </div>
+    <div className="p-4 border-t border-white/5">
+      <div className="glass rounded-2xl p-3 flex flex-col gap-2 focus-within:border-indigo-500/40 transition-all">
+        <textarea
+          className="w-full bg-transparent text-gray-200 text-sm resize-none focus:outline-none placeholder-gray-600 leading-relaxed"
+          rows={2}
+          placeholder="Type a prompt... (Enter to send, Shift+Enter for new line)"
+          value={prompt}
+          onChange={e => setPrompt(e.target.value)}
+          onKeyDown={handleKeyDown}
+          disabled={isBlocked || isLoading}
+        />
+        <div className="flex items-center justify-between">
+          <TokenEstimator prompt={prompt} />
+          <button
+            onClick={handleSend}
+            disabled={!canSend}
+            className={`flex items-center gap-2 px-4 py-1.5 rounded-xl text-sm font-medium transition-all ${
+              canSend
+                ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white hover:from-indigo-500 hover:to-indigo-400 glow-blue'
+                : 'bg-dark-600 text-gray-600 cursor-not-allowed'
+            }`}
+          >
+            {isBlocked ? `⏳ ${retryAfter}s` : isLoading ? (
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-gray-400 dot-1" />
+                <span className="w-1.5 h-1.5 rounded-full bg-gray-400 dot-2" />
+                <span className="w-1.5 h-1.5 rounded-full bg-gray-400 dot-3" />
+              </span>
+            ) : (
+              <>Send <span className="text-indigo-300">↵</span></>
+            )}
+          </button>
         </div>
-        <button
-          onClick={handleSend}
-          disabled={!canSend}
-          className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-            canSend
-              ? 'bg-blue-500 text-white hover:bg-blue-600'
-              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-          }`}
-        >
-          {isBlocked ? `Wait ${retryAfter}s` : isLoading ? '...' : 'Send'}
-        </button>
       </div>
     </div>
   );
