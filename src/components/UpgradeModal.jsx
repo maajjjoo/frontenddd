@@ -8,53 +8,44 @@ export default function UpgradeModal({ onClose, onUpgraded }) {
 
   const handleUpgrade = async () => {
     setLoading(true);
-    try {
-      await upgradePlan(activeUser.id);
-      onUpgraded();
-      onClose();
-    } catch (err) {
-      console.error('Upgrade failed', err);
-    } finally {
-      setLoading(false);
-    }
+    try { await upgradePlan(activeUser.id); onUpgraded(); onClose(); }
+    catch (err) { console.error(err); }
+    finally { setLoading(false); }
   };
 
   return (
-    <div className="fixed inset-0 bg-pink-100/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-3xl p-6 w-full max-w-md border border-pastel-rose/40 soft-shadow">
+    <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl p-6 w-full max-w-sm border border-gray-100 shadow-xl">
         <div className="text-center mb-5">
-          <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-pastel-pink to-pastel-lavender flex items-center justify-center text-3xl mx-auto mb-3 soft-shadow">
-            🌸
+          <div className="w-11 h-11 rounded-xl bg-indigo-50 flex items-center justify-center mx-auto mb-3">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
           </div>
-          <h2 className="text-lg font-bold text-soft-text">Monthly quota exhausted</h2>
-          <p className="text-sm text-soft-muted mt-1">Upgrade your plan to keep generating</p>
+          <h2 className="text-base font-semibold text-gray-900">Monthly quota exhausted</h2>
+          <p className="text-xs text-gray-400 mt-1">Upgrade your plan to continue generating</p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 mb-5">
-          <div className="rounded-2xl p-4 bg-pastel-sky/40 border border-blue-200/60">
-            <div className="text-xs font-semibold text-blue-500 mb-1">🚀 PRO</div>
-            <div className="text-xs text-soft-muted">500,000 tokens/mo</div>
-            <div className="text-xl font-bold text-soft-text mt-2">$9.99<span className="text-xs text-soft-muted font-normal">/mo</span></div>
+        <div className="grid grid-cols-2 gap-2 mb-4">
+          <div className="rounded-xl p-3 bg-indigo-50 border border-indigo-100">
+            <p className="text-xs font-semibold text-indigo-700">🚀 PRO</p>
+            <p className="text-xs text-gray-400 mt-0.5">500k tokens/mo</p>
+            <p className="text-sm font-bold text-gray-900 mt-1.5">$9.99<span className="text-xs font-normal text-gray-400">/mo</span></p>
           </div>
-          <div className="rounded-2xl p-4 bg-pastel-lavender/40 border border-purple-200/60">
-            <div className="text-xs font-semibold text-purple-500 mb-1">👑 ENTERPRISE</div>
-            <div className="text-xs text-soft-muted">Unlimited tokens</div>
-            <div className="text-xl font-bold text-soft-text mt-2">Custom</div>
+          <div className="rounded-xl p-3 bg-amber-50 border border-amber-100">
+            <p className="text-xs font-semibold text-amber-700">👑 ENTERPRISE</p>
+            <p className="text-xs text-gray-400 mt-0.5">Unlimited</p>
+            <p className="text-sm font-bold text-gray-900 mt-1.5">Custom</p>
           </div>
         </div>
 
         <div className="flex gap-2">
-          <button
-            onClick={handleUpgrade}
-            disabled={loading}
-            className="flex-1 bg-gradient-to-r from-pink-400 to-rose-400 text-white rounded-2xl py-2.5 text-sm font-semibold hover:from-pink-300 hover:to-rose-300 transition-all disabled:opacity-50 soft-shadow"
-          >
-            {loading ? 'Upgrading...' : '✦ Upgrade to Pro'}
+          <button onClick={handleUpgrade} disabled={loading}
+            className="flex-1 bg-indigo-600 text-white rounded-xl py-2 text-xs font-semibold hover:bg-indigo-700 transition-all disabled:opacity-50">
+            {loading ? 'Upgrading...' : 'Upgrade to Pro'}
           </button>
-          <button
-            onClick={onClose}
-            className="flex-1 bg-pastel-pink/30 text-soft-muted rounded-2xl py-2.5 text-sm font-medium hover:bg-pastel-pink/50 transition-all border border-pastel-rose/30"
-          >
+          <button onClick={onClose}
+            className="flex-1 bg-gray-50 text-gray-500 rounded-xl py-2 text-xs font-medium hover:bg-gray-100 transition-all border border-gray-100">
             Maybe later
           </button>
         </div>

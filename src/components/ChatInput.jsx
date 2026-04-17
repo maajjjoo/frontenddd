@@ -15,44 +15,31 @@ export default function ChatInput({ onNewMessage, onQuotaExceeded, isBlocked, re
     const text = prompt.trim();
     setPrompt('');
     onNewMessage({ id: Date.now(), role: 'user', text, timestamp: new Date() });
-    setIsLoading(true);
-    onLoadingChange?.(true);
+    setIsLoading(true); onLoadingChange?.(true);
     try {
-      const response = await generateText(activeUser.id, text);
-      onNewMessage({ id: Date.now() + 1, role: 'ai', text: response.text, timestamp: new Date() });
+      const res = await generateText(activeUser.id, text);
+      onNewMessage({ id: Date.now() + 1, role: 'ai', text: res.text, timestamp: new Date() });
       await refreshQuota();
     } catch (err) {
       const status = err.response?.status;
-      if (status === 429) {
-        block(err.response.data?.retryAfterSeconds ?? 60);
-      } else if (status === 402) {
-        onQuotaExceeded();
-      } else {
-        onNewMessage({ id: Date.now() + 1, role: 'ai', text: '⚠️ ' + (err.message ?? 'Unknown error'), timestamp: new Date() });
-      }
+      if (status === 429) block(err.response.data?.retryAfterSeconds ?? 60);
+      else if (status === 402) onQuotaExceeded();
+      else onNewMessage({ id: Date.now() + 1, role: 'ai', text: '⚠️ ' + (err.message ?? 'Error'), timestamp: new Date() });
     } finally {
-      setIsLoading(false);
-      onLoadingChange?.(false);
-    }
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
+      setIsLoading(false); onLoadingChange?.(false);
     }
   };
 
   return (
-    <div className="p-4 border-t border-pastel-pink/40 bg-white/60 backdrop-blur-sm">
-      <div className="bg-white border border-pastel-rose/40 rounded-2xl p-3 flex flex-col gap-2 soft-shadow focus-within:border-pink-300 transition-all">
+    <div className="p-4 bg-white border-t border-gray-100">
+      <div className="border border-gray-200 rounded-2xl p-3 flex flex-col gap-2 bg-white focus-within:border-indigo-300 focus-within:ring-2 focus-within:ring-indigo-50 transition-all">
         <textarea
-          className="w-full bg-transparent text-soft-text text-sm resize-none focus:outline-none placeholder-soft-muted leading-relaxed"
+          className="w-full bg-transparent text-gray-800 text-sm resize-none focus:outline-none placeholder-gray-400 leading-relaxed"
           rows={2}
-          placeholder="Type a prompt... (Enter to send)"
+          placeholder="Type a prompt... (Enter to send, Shift+Enter for new line)"
           value={prompt}
           onChange={e => setPrompt(e.target.value)}
-          onKeyDown={handleKeyDown}
+          onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
           disabled={isBlocked || isLoading}
         />
         <div className="flex items-center justify-between">
@@ -60,19 +47,13 @@ export default function ChatInput({ onNewMessage, onQuotaExceeded, isBlocked, re
           <button
             onClick={handleSend}
             disabled={!canSend}
-            className={`flex items-center gap-2 px-4 py-1.5 rounded-xl text-sm font-semibold transition-all ${
+            className={`px-4 py-1.5 rounded-xl text-xs font-semibold transition-all ${
               canSend
-                ? 'bg-gradient-to-r from-pink-400 to-rose-400 text-white hover:from-pink-300 hover:to-rose-300 soft-shadow'
-                : 'bg-pastel-pink/40 text-soft-muted cursor-not-allowed'
+                ? 'bg-indigo-600 text-white hover:bg-indigo-700'
+                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
             }`}
           >
-            {isBlocked ? `⏳ ${retryAfter}s` : isLoading ? (
-              <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-pink-300 dot-1" />
-                <span className="w-1.5 h-1.5 rounded-full bg-pink-300 dot-2" />
-                <span className="w-1.5 h-1.5 rounded-full bg-pink-300 dot-3" />
-              </span>
-            ) : 'Send ✦'}
+            {isBlocked ? `Wait ${retryAfter}s` : isLoading ? '...' : 'Send'}
           </button>
         </div>
       </div>

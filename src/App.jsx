@@ -8,6 +8,7 @@ import RateLimitCounter from './components/RateLimitCounter';
 import ChatWindow from './components/ChatWindow';
 import ChatInput from './components/ChatInput';
 import UsageChart from './components/UsageChart';
+import UserCard from './components/UserCard';
 import UpgradeModal from './components/UpgradeModal';
 
 export default function App() {
@@ -22,78 +23,52 @@ export default function App() {
 
   const handleUserChange = (e) => {
     const user = TEST_USERS.find(u => u.id === Number(e.target.value));
-    if (user) {
-      setActiveUser(user);
-      setQuota(null);
-      setMessages([]);
-    }
+    if (user) { setActiveUser(user); setQuota(null); setMessages([]); }
   };
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden" style={{ background: 'linear-gradient(135deg, #fdf6f9 0%, #f5eeff 50%, #fdf0f8 100%)' }}>
+    <div className="h-screen flex flex-col overflow-hidden bg-[#f9f9fb]">
 
       {/* Header */}
-      <header className="flex-shrink-0 flex items-center justify-between px-5 py-3 bg-white/70 backdrop-blur-sm border-b border-pastel-pink/40 soft-shadow">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-pink-300 to-rose-300 flex items-center justify-center text-lg soft-shadow">
-            🌸
+      <header className="flex-shrink-0 flex items-center justify-between px-6 py-3.5 bg-white border-b border-gray-100">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+            </svg>
           </div>
-          <div>
-            <span className="font-bold text-soft-text tracking-tight">AI Platform</span>
-            <span className="text-xs text-soft-muted ml-2">Proxy Pattern Demo</span>
-          </div>
+          <span className="font-semibold text-gray-900 text-sm">AI Platform</span>
         </div>
         <div className="flex items-center gap-3">
           <PlanBadge />
           <select
             value={activeUser.id}
             onChange={handleUserChange}
-            className="text-xs bg-white border border-pastel-rose/50 text-soft-text rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-pink-200 cursor-pointer soft-shadow"
+            className="text-xs bg-gray-50 border border-gray-200 text-gray-700 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-200 cursor-pointer"
           >
-            {TEST_USERS.map(u => (
-              <option key={u.id} value={u.id}>{u.name}</option>
-            ))}
+            {TEST_USERS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
           </select>
         </div>
       </header>
 
-      {/* Body */}
       <div className="flex flex-1 overflow-hidden">
 
         {/* Sidebar */}
-        <aside className="hidden md:flex w-64 flex-col gap-4 p-4 border-r border-pastel-pink/30 bg-white/40 backdrop-blur-sm overflow-y-auto flex-shrink-0">
+        <aside className="hidden md:flex w-60 flex-col gap-3 p-4 overflow-y-auto flex-shrink-0 bg-white border-r border-gray-100">
 
-          {/* Quota */}
-          <div className="soft-card rounded-2xl p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-base">🍬</span>
-              <span className="text-xs font-semibold text-soft-text uppercase tracking-wider">Quota</span>
-            </div>
+          <div className="rounded-xl p-4 bg-gray-50 border border-gray-100">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Quota</p>
             <QuotaBar />
           </div>
 
-          {/* Rate limit */}
           <RateLimitCounter plan={activeUser.plan} isBlocked={isBlocked} retryAfter={retryAfter} />
 
-          {/* Chart */}
-          <div className="soft-card rounded-2xl p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-base">📊</span>
-              <span className="text-xs font-semibold text-soft-text uppercase tracking-wider">7-day usage</span>
-            </div>
+          <div className="rounded-xl p-4 bg-gray-50 border border-gray-100">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Usage — 7 days</p>
             <UsageChart />
           </div>
 
-          {/* User card */}
-          <div className="mt-auto soft-card rounded-2xl p-3 flex items-center gap-3">
-            <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-pastel-pink to-pastel-lavender flex items-center justify-center text-sm font-bold text-pink-600 flex-shrink-0 soft-shadow">
-              {activeUser.name[0]}
-            </div>
-            <div className="min-w-0">
-              <div className="text-xs font-semibold text-soft-text truncate">{activeUser.name}</div>
-              <div className="text-xs text-soft-muted">User ID: {activeUser.id}</div>
-            </div>
-          </div>
+          <UserCard />
         </aside>
 
         {/* Chat */}
@@ -111,12 +86,7 @@ export default function App() {
         </main>
       </div>
 
-      {showUpgrade && (
-        <UpgradeModal
-          onClose={() => setShowUpgrade(false)}
-          onUpgraded={refresh}
-        />
-      )}
+      {showUpgrade && <UpgradeModal onClose={() => setShowUpgrade(false)} onUpgraded={refresh} />}
     </div>
   );
 }
