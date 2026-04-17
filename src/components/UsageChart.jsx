@@ -18,7 +18,9 @@ export default function UsageChart() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    getQuotaHistory(activeUser.id).then(setData).catch(() => {});
+    getQuotaHistory(activeUser.id)
+      .then(res => setData(Array.isArray(res) ? res : []))
+      .catch(() => setData([]));
   }, [activeUser.id]);
 
   if (!data.length) return <div className="text-xs text-gray-400 text-center py-4">No data yet</div>;
