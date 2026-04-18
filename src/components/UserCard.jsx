@@ -28,6 +28,9 @@ export default function UserCard() {
   const colors = PLAN_COLORS[plan] ?? PLAN_COLORS.FREE;
   const perks = PLAN_PERKS[plan] ?? PLAN_PERKS.FREE;
   const resetDate = quota?.resetDate ?? '—';
+  const tokensUsed = quota?.tokensUsed ?? 0;
+  const tokensRemaining = quota?.tokensRemaining ?? null;
+  const isUnlimited = tokensRemaining === null || tokensRemaining > 1_000_000_000;
 
   return (
     <div className="relative mt-auto" ref={ref}>
